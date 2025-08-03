@@ -1,16 +1,16 @@
 import { auth } from '@clerk/nextjs/server';
-import { createSupabaseClientWithToken } from '@/lib/supabase'; // your helper
+import { createSupabaseClientWithToken } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
-type Props = {
+interface PageProps {
   params: {
     id: string;
   };
-};
+}
 
-export default async function EventDetailPage({ params }: Props) {
+export default async function EventDetailPage({ params }: PageProps) {
   const id = params.id;
 
   // 🔐 Get the Clerk token using the 'supabase' template
@@ -48,11 +48,12 @@ export default async function EventDetailPage({ params }: Props) {
   return (
     <div className="max-w-2xl mx-auto py-10 px-4">
       <h1 className="text-3xl font-bold mb-4">{event.title}</h1>
+      
       <img
-  src="https://media.istockphoto.com/id/1597475039/photo/abstract-colorful-glass-background.jpg?s=612x612&w=0&k=20&c=Gv5iCYYzRnE7F_RwFDacJGmEgLfArYnkeyORu1umeZM="
-  alt={event.title}
-  className="rounded-lg w-full h-auto object-cover"
-/>
+        src="https://media.istockphoto.com/id/1597475039/photo/abstract-colorful-glass-background.jpg?s=612x612&w=0&k=20&c=Gv5iCYYzRnE7F_RwFDacJGmEgLfArYnkeyORu1umeZM="
+        alt={event.title}
+        className="rounded-lg w-full h-auto object-cover"
+      />
 
       <p className="text-gray-700 mt-4">{event.description}</p>
       <p className="text-gray-500 mt-2">
