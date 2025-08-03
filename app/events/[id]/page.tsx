@@ -4,16 +4,13 @@ import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default async function EventDetailPage({ params }: PageProps) {
+export default async function EventDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const id = params.id;
 
-  // 🔐 Get the Clerk token using the 'supabase' template
   const { getToken } = await auth();
   const token = await getToken({ template: 'supabase' });
 
@@ -22,14 +19,9 @@ export default async function EventDetailPage({ params }: PageProps) {
     return notFound();
   }
 
-  // ✅ Create Supabase client with Bearer token
   const supabase = createSupabaseClientWithToken(token);
 
   console.log("📦 Fetching event with ID:", id);
-
-  // 🟡 Debug all events the user can see
-  const allVisible = await supabase.from('events').select('*');
-  console.log("🟡 Visible events to current user:", allVisible.data);
 
   const { data: event, error } = await supabase
     .from('events')
@@ -48,7 +40,7 @@ export default async function EventDetailPage({ params }: PageProps) {
   return (
     <div className="max-w-2xl mx-auto py-10 px-4">
       <h1 className="text-3xl font-bold mb-4">{event.title}</h1>
-      
+
       <img
         src="https://media.istockphoto.com/id/1597475039/photo/abstract-colorful-glass-background.jpg?s=612x612&w=0&k=20&c=Gv5iCYYzRnE7F_RwFDacJGmEgLfArYnkeyORu1umeZM="
         alt={event.title}
